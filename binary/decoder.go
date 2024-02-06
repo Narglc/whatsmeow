@@ -340,10 +340,13 @@ func (r *binaryDecoder) readList(tag int) ([]Node, error) {
 func (r *binaryDecoder) readNode() (*Node, error) {
 	ret := &Node{}
 
+	// tag.size
 	size, err := r.readInt8(false)
 	if err != nil {
 		return nil, err
 	}
+
+	// tag_val
 	listSize, err := r.readListSize(size)
 	if err != nil {
 		return nil, err

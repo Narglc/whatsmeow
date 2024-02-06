@@ -756,7 +756,25 @@ func handleCmd(cmd string, args []string) {
 		if !ok {
 			return
 		}
-		msg := &waProto.Message{Conversation: proto.String(strings.Join(args[1:], " "))}
+
+		msg := &waProto.Message{}
+		// 单聊使用新的Struct传递信息
+		if strings.Contains(args[0], "s.whatsapp.net") {
+			msg = &waProto.Message{
+				DeviceSentMessage: &waProto.DeviceSentMessage{
+					DestinationJid: proto.String(strings.Join(args[1:], " ")),
+					Message: &waProto.Message{
+						ExtendedTextMessage: &waProto.ExtendedTextMessage{
+							Text: proto.String(strings.Join(args[1:], " ")),
+						},
+					},
+				},
+			}
+		} else {
+			msg = &waProto.Message{Conversation: proto.String(strings.Join(args[1:], " "))}
+		}
+
+		// msg := &waProto.Message{Conversation: proto.String(strings.Join(args[1:], " "))}
 		resp, err := cli.SendMessage(context.Background(), recipient, msg)
 		if err != nil {
 			log.Errorf("Error sending message: %v", err)

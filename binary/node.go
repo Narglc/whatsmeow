@@ -119,6 +119,7 @@ func (n *Node) GetChildByTag(tags ...string) Node {
 	return node
 }
 
+// 序列化
 // Marshal encodes an XML element (Node) into WhatsApp's binary XML representation.
 func Marshal(n Node) ([]byte, error) {
 	w := newEncoder()
@@ -126,6 +127,7 @@ func Marshal(n Node) ([]byte, error) {
 	return w.getData(), nil
 }
 
+// 反序列化
 // Unmarshal decodes WhatsApp's binary XML representation into a Node.
 func Unmarshal(data []byte) (*Node, error) {
 	r := newDecoder(data)

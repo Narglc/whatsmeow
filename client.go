@@ -544,6 +544,7 @@ func (cli *Client) handleFrame(data []byte) {
 		cli.Log.Debugf("Errored frame hex: %s", hex.EncodeToString(data))
 		return
 	}
+	cli.recvLog.Debugf("%X", decompressed)
 	node, err := waBinary.Unmarshal(decompressed)
 	if err != nil {
 		cli.Log.Warnf("Failed to decode node in frame: %v", err)
@@ -624,7 +625,7 @@ func (cli *Client) sendNodeAndGetData(node waBinary.Node) ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal node: %w", err)
 	}
-
+	cli.sendLog.Debugf("%X", payload)
 	cli.sendLog.Debugf("%s", node.XMLString())
 	return payload, sock.SendFrame(payload)
 }
